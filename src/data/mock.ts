@@ -1,5 +1,5 @@
 // --- 3. Mock Data (FULL ITINERARY 24 Days) ---
-import { DaySchedule, Booking, Expense, Member, JournalPost } from '../types';
+import type { DaySchedule, Booking, Expense, Member, JournalPost } from '../types';
 export const initialSchedule: DaySchedule[] = [
   // --- TAIWAN -> NETHERLANDS ---
   {
@@ -264,9 +264,9 @@ export const initialBookings: Booking[] = [
 ];
 
 export const initialExpenses: Expense[] = [
-  { id: 'e1', title: 'Kia Sorento 租車費', amount: 251617, currency: 'ISK', category: 'transport', date: '2026-09-19', payer: '依如' },
+  { id: 'e1', title: 'Kia Sorento 租車費', amount: 251617, currency: 'ISK', category: 'transport', date: '2026-09-19', payer: 'Me' },
   { id: 'e2', title: '藍湖溫泉門票', amount: 17990, currency: 'ISK', category: 'activity', date: '2026-09-19', payer: 'Me' },
-  { id: 'e3', title: 'Brautarholt 20 住宿', amount: 336.96, currency: 'EUR', category: 'stay', date: '2026-09-19', payer: '老妹' },
+  { id: 'e3', title: 'Brautarholt 20 住宿', amount: 336.96, currency: 'EUR', category: 'stay', date: '2026-09-19', payer: 'Me' },
   { id: 'e4', title: '小豬超市採買', amount: 8500, currency: 'ISK', category: 'food', date: '2026-09-19', payer: 'Me' },
 ];
 
@@ -274,7 +274,7 @@ export const initialMembers: Member[] = [
   { id: 'm1', name: 'Me', role: 'Organizer', avatarColor: 'bg-nordic-primary' },
   { id: 'm2', name: '老妹', role: 'Finance', avatarColor: 'bg-pink-400' },
   { id: 'm3', name: '依如', role: 'Driver', avatarColor: 'bg-emerald-400' },
-  { id: 'm4', name: '加新', role: 'Member', avatarColor: 'bg-amber-400' },
+  { id: 'm4', name: '家馨', role: 'Member', avatarColor: 'bg-amber-400' },
 ];
 
 export const initialPosts: JournalPost[] = [

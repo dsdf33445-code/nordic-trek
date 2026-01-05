@@ -1,8 +1,10 @@
+// src/views/ExpenseView.tsx
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTimes, faBackspace } from '@fortawesome/free-solid-svg-icons';
-import { Expense, CategoryType, CurrencyCode } from '../types';
+// Change: Added 'type' keyword
+import type { Expense, CategoryType, CurrencyCode } from '../types';
 import { initialMembers } from '../data/mock';
 import { CategoryIcon } from '../components/Shared';
 import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';

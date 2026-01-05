@@ -1,7 +1,9 @@
+// src/views/MembersView.tsx
 import { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import { Expense } from '../types';
+// Change: Added 'type' keyword
+import type { Expense } from '../types';
 import { initialMembers } from '../data/mock';
 import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';
 

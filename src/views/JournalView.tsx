@@ -1,8 +1,10 @@
+// src/views/JournalView.tsx
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faTimes, faImage, faHeart, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { JournalPost } from '../types';
+// Change: Added 'type' keyword
+import type { JournalPost } from '../types';
 
 interface JournalViewProps {
   posts: JournalPost[];

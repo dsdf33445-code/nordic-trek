@@ -1,5 +1,5 @@
 // src/utils/helpers.ts
-import { CurrencyCode } from '../types';
+import type { CurrencyCode } from '../types'; // Change: Added 'type'
 
 export const TRIP_START_DATE = "2026-09-18";
 export const TRIP_END_DATE = "2026-10-11";
