@@ -1,20 +1,20 @@
-// src/views/ExpenseView.tsx
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTimes, faBackspace } from '@fortawesome/free-solid-svg-icons';
-// Change: Added 'type' keyword
-import type { Expense, CategoryType, CurrencyCode } from '../types';
-import { initialMembers } from '../data/mock';
+import type { Expense, CategoryType, CurrencyCode, Member } from '../types'; // 🔴 引入 Member
 import { CategoryIcon } from '../components/Shared';
 import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';
 
+// 🔴 移除 initialMembers import
+
 interface ExpenseViewProps {
   expenses: Expense[];
+  members: Member[]; // 🔴 新增 members prop
   onAddExpense: (expense: Expense) => void;
 }
 
-export default function ExpenseView({ expenses, onAddExpense }: ExpenseViewProps) {
+export default function ExpenseView({ expenses, members, onAddExpense }: ExpenseViewProps) {
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [newExpenseAmount, setNewExpenseAmount] = useState("");
   const [newExpenseCurrency, setNewExpenseCurrency] = useState<CurrencyCode>('ISK');
@@ -81,7 +81,8 @@ export default function ExpenseView({ expenses, onAddExpense }: ExpenseViewProps
               ))}
             </div>
             <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-                {initialMembers.map(m => (
+                {/* 🔴 改用 members */}
+                {members.map(m => (
                     <button key={m.id} onClick={() => setNewExpensePayer(m.name)} className={`px-4 py-1 rounded-lg text-sm font-bold border ${newExpensePayer === m.name ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-white text-gray-400 border-gray-100'}`}>{m.name}</button>
                 ))}
             </div>

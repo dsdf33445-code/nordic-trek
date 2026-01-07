@@ -1,28 +1,34 @@
-// src/views/MembersView.tsx
 import { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
-// Change: Added 'type' keyword
-import type { Expense } from '../types';
-import { initialMembers } from '../data/mock';
+import type { Expense, Member } from '../types'; // 🔴 引入 Member
 import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';
 
-export default function MembersView({ expenses }: { expenses: Expense[] }) {
+// 🔴 移除 initialMembers import
+
+interface MembersViewProps {
+  expenses: Expense[];
+  members: Member[]; // 🔴 新增 members prop
+}
+
+export default function MembersView({ expenses, members }: MembersViewProps) {
   const memberSpending = useMemo(() => {
     const spending: Record<string, number> = {};
-    initialMembers.forEach(m => spending[m.name] = 0);
+    // 🔴 改用傳入的 members
+    members.forEach(m => spending[m.name] = 0);
     expenses.forEach(e => {
       const twd = e.amount * EXCHANGE_RATES[e.currency];
       if (spending[e.payer] !== undefined) spending[e.payer] += twd;
       else spending[e.payer] = twd;
     });
     return Object.entries(spending).sort(([,a], [,b]) => b - a);
-  }, [expenses]);
+  }, [expenses, members]); // 🔴 依賴項加入 members
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        {initialMembers.map(m => (
+        {/* 🔴 改用 members */}
+        {members.map(m => (
           <div key={m.id} className="bg-white p-4 rounded-2xl shadow-sm text-center border border-gray-50">
             <div className={`w-16 h-16 ${m.avatarColor} rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold`}>{m.name[0]}</div>
             <h3 className="font-bold text-nordic-text">{m.name}</h3>
@@ -43,7 +49,7 @@ export default function MembersView({ expenses }: { expenses: Expense[] }) {
                   <span>{formatCurrency(amount, 'TWD')}</span>
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-nordic-primary rounded-full transition-all duration-500" style={{ width: (amount / (memberSpending[0][1] || 1)) * 100 + '%' }}></div>
+                  <div className="h-full bg-nordic-primary rounded-full transition-all duration-500" style={{ width: (amount / (memberSpending[0]?.[1] || 1)) * 100 + '%' }}></div>
                 </div>
               </div>
             </div>

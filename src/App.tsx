@@ -3,81 +3,81 @@ import { differenceInDays, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faWallet, faSuitcase, faUserFriends, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
-// Firebase Imports
 import { db } from './firebase';
 import { collection, onSnapshot, query, orderBy, addDoc } from 'firebase/firestore';
 
-// Types (使用 type-only import)
-import type { Expense, JournalPost, DaySchedule, Booking } from './types';
+// 🔴 修正：補上 Member 型別
+import type { Expense, JournalPost, DaySchedule, Booking, Member } from './types';
 
-// Helpers
 import { TRIP_START_DATE, EXCHANGE_RATES, formatCurrency } from './utils/helpers';
 
-// Views
 import ScheduleView from './views/ScheduleView';
 import BookingsView from './views/BookingsView';
 import ExpenseView from './views/ExpenseView';
 import MembersView from './views/MembersView';
 import JournalView from './views/JournalView';
 
-// Components
-// import DataSeeder from './components/DataSeeder'; // 需要初始化資料時再打開
+// import DataSeeder from './components/DataSeeder'; 
 
 function App() {
   const [activeTab, setActiveTab] = useState('schedule');
   
-  // State 改為從 Firebase 讀取，初始值設為空陣列
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [journalPosts, setJournalPosts] = useState<JournalPost[]>([]);
-  // 行程與預訂通常變動少，但為了同步也讀取雲端
   const [schedules, setSchedules] = useState<DaySchedule[]>([]); 
   const [bookings, setBookings] = useState<Booking[]>([]);
+  // 🔴 新增：成員狀態
+  const [members, setMembers] = useState<Member[]>([]);
 
-  // --- Firebase Realtime Listeners ---
   useEffect(() => {
-    // 1. 監聽支出 (Expenses)
+    // 1. Expenses
     const qExpenses = query(collection(db, "expenses"), orderBy("date", "desc"));
     const unsubExpenses = onSnapshot(qExpenses, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Expense));
+      const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as Expense));
       setExpenses(data);
     });
 
-    // 2. 監聽日誌 (Posts)
+    // 2. Posts
     const qPosts = query(collection(db, "posts"), orderBy("date", "desc"));
     const unsubPosts = onSnapshot(qPosts, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as JournalPost));
+      const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as JournalPost));
       setJournalPosts(data);
     });
 
-    // 3. 監聽行程
+    // 3. Schedules
     const qSchedules = query(collection(db, "schedules"), orderBy("date", "asc"));
     const unsubSchedules = onSnapshot(qSchedules, (snapshot) => {
         const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as DaySchedule));
         setSchedules(data);
     });
 
-    // 4. 監聽預訂 (Bookings)
+    // 4. Bookings
     const qBookings = query(collection(db, "bookings"), orderBy("date", "asc"));
     const unsubBookings = onSnapshot(qBookings, (snapshot) => {
-        const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Booking));
+        const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as Booking));
         setBookings(data);
     });
 
+    // 🔴 5. 新增：監聽成員 Members
+    const qMembers = query(collection(db, "members")); // 成員通常不用排序或可依 ID 排
+    const unsubMembers = onSnapshot(qMembers, (snapshot) => {
+        const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as Member));
+        setMembers(data);
+    });
+
     return () => {
-      // 組件卸載時取消監聽
       unsubExpenses();
       unsubPosts();
       unsubSchedules();
       unsubBookings();
+      unsubMembers();
     };
   }, []);
 
-  // --- Actions (Write to Firebase) ---
   const handleAddExpenseToFirebase = async (newExpense: Expense) => {
-    // 移除 id，讓 Firestore 自動生成 (或保留 id 若要自訂)
-    // 這裡我們直接寫入，onSnapshot 會自動更新 UI，不需要手動 setExpenses
     try {
-        const { id, ...data } = newExpense; // 剔除前端生成的暫時 ID
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...data } = newExpense; 
         await addDoc(collection(db, "expenses"), data);
     } catch (e) {
         console.error("Error adding expense: ", e);
@@ -87,6 +87,7 @@ function App() {
 
   const handleAddPostToFirebase = async (newPost: JournalPost) => {
     try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { id, ...data } = newPost;
         await addDoc(collection(db, "posts"), data);
     } catch (e) {
@@ -94,15 +95,13 @@ function App() {
     }
   };
 
-  // --- Calculations ---
   const daysUntilTrip = useMemo(() => differenceInDays(parseISO(TRIP_START_DATE), new Date()), []);
   const totalExpenseTWD = useMemo(() => expenses.reduce((sum, item) => sum + (item.amount * EXCHANGE_RATES[item.currency]), 0), [expenses]);
 
   return (
     <div className="min-h-screen bg-nordic-bg font-sans pb-24 text-nordic-text">
-      {/* <DataSeeder /> */} 
+      {/* <DataSeeder /> */}
 
-      {/* Header */}
       <div className="bg-white p-6 rounded-b-3xl shadow-soft sticky top-0 z-10">
         <div className="flex justify-between items-center mb-4">
           <div><h1 className="text-2xl font-bold tracking-tight">Nordic Trek</h1><p className="text-nordic-muted text-sm font-medium">2026 冰島+北歐三國</p></div>
@@ -124,16 +123,19 @@ function App() {
         )}
       </div>
 
-      {/* Main Content */}
       <div className="p-6 fade-in max-w-lg mx-auto pb-24">
         {activeTab === 'schedule' && <ScheduleView schedules={schedules} />}
         {activeTab === 'bookings' && <BookingsView bookings={bookings} />}
-        {activeTab === 'expense' && <ExpenseView expenses={expenses} onAddExpense={handleAddExpenseToFirebase} />}
-        {activeTab === 'members' && <MembersView expenses={expenses} />}
+        
+        {/* 🔴 修正：傳入 members 給 ExpenseView (為了選付款人) */}
+        {activeTab === 'expense' && <ExpenseView expenses={expenses} members={members} onAddExpense={handleAddExpenseToFirebase} />}
+        
+        {/* 🔴 修正：傳入 members 給 MembersView */}
+        {activeTab === 'members' && <MembersView expenses={expenses} members={members} />}
+        
         {activeTab === 'journal' && <JournalView posts={journalPosts} onAddPost={handleAddPostToFirebase} />}
       </div>
 
-      {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-100 pb-safe pt-2 px-4 flex justify-between items-center z-50 h-20 shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
         <NavButton icon={faBookOpen} label="行程" isActive={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} />
         <NavButton icon={faWallet} label="記帳" isActive={activeTab === 'expense'} onClick={() => setActiveTab('expense')} />
