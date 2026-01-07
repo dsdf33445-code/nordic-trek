@@ -1,16 +1,15 @@
+// src/views/ExpenseView.tsx
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTimes, faBackspace } from '@fortawesome/free-solid-svg-icons';
-import type { Expense, CategoryType, CurrencyCode, Member } from '../types'; // 🔴 引入 Member
+import { faPlus, faTimes, faBackspace, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import type { Expense, CategoryType, CurrencyCode, Member } from '../types';
 import { CategoryIcon } from '../components/Shared';
 import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';
 
-// 🔴 移除 initialMembers import
-
 interface ExpenseViewProps {
   expenses: Expense[];
-  members: Member[]; // 🔴 新增 members prop
+  members: Member[];
   onAddExpense: (expense: Expense) => void;
 }
 
@@ -21,6 +20,8 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
   const [newExpenseCategory, setNewExpenseCategory] = useState<CategoryType>('food');
   const [newExpenseTitle, setNewExpenseTitle] = useState("");
   const [newExpensePayer, setNewExpensePayer] = useState("Me");
+  // 🔴 新增：日期狀態，預設今天
+  const [newExpenseDate, setNewExpenseDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   const handleAddExpense = () => {
     if (!newExpenseAmount || !newExpenseTitle) return;
@@ -30,13 +31,16 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
       amount: parseFloat(newExpenseAmount),
       currency: newExpenseCurrency,
       category: newExpenseCategory,
-      date: format(new Date(), 'yyyy-MM-dd'),
+      // 🔴 修正：使用使用者選擇的日期
+      date: newExpenseDate,
       payer: newExpensePayer
     };
     onAddExpense(newExp);
     setShowAddExpense(false);
     setNewExpenseAmount("");
     setNewExpenseTitle("");
+    // 重置為今天，或保留上次選擇的日期視需求而定
+    setNewExpenseDate(format(new Date(), 'yyyy-MM-dd'));
   };
 
   const handleKeypadPress = (val: string) => {
@@ -51,7 +55,15 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
       {expenses.map((expense) => (
         <div key={expense.id} className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4 border border-gray-50">
           <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg ${expense.currency === 'TWD' ? 'bg-gray-100 text-gray-600' : 'bg-blue-50 text-blue-600'}`}><CategoryIcon type={expense.category} /></div>
-          <div className="flex-1"><h4 className="font-bold text-nordic-text">{expense.title}</h4><div className="flex items-center gap-2 text-xs text-nordic-muted"><span>{expense.payer}</span><span>•</span><span>{expense.date}</span></div></div>
+          <div className="flex-1">
+            <h4 className="font-bold text-nordic-text">{expense.title}</h4>
+            <div className="flex items-center gap-2 text-xs text-nordic-muted">
+              <span>{expense.payer}</span>
+              <span>•</span>
+              {/* 顯示日期 */}
+              <span>{expense.date}</span>
+            </div>
+          </div>
           <div className="text-right"><p className="font-bold text-lg">{formatCurrency(expense.amount, expense.currency)}</p>{expense.currency !== 'TWD' && <p className="text-xs text-nordic-muted">≈ {formatCurrency(expense.amount * EXCHANGE_RATES[expense.currency], 'TWD')}</p>}</div>
         </div>
       ))}
@@ -74,14 +86,28 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
               </div>
               <p className="text-nordic-muted text-sm mt-2">≈ TWD {formatCurrency((parseFloat(newExpenseAmount) || 0) * EXCHANGE_RATES[newExpenseCurrency], 'TWD')}</p>
             </div>
+
+            {/* 🔴 新增：日期選擇器 */}
+            <div className="flex gap-2 mb-4">
+                <div className="bg-white rounded-xl p-3 flex-1 flex items-center gap-2 border border-transparent focus-within:border-blue-200">
+                    <FontAwesomeIcon icon={faCalendarAlt} className="text-gray-400" />
+                    <input 
+                        type="date" 
+                        value={newExpenseDate}
+                        onChange={(e) => setNewExpenseDate(e.target.value)}
+                        className="w-full outline-none font-bold text-nordic-text bg-transparent"
+                    />
+                </div>
+            </div>
+
             <input type="text" placeholder="消費項目 (如: 晚餐)" value={newExpenseTitle} onChange={(e) => setNewExpenseTitle(e.target.value)} className="w-full bg-white p-4 rounded-xl text-center font-bold text-lg mb-4 shadow-sm outline-none" />
+            
             <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
               {['food', 'transport', 'stay', 'activity', 'shopping'].map((cat) => (
                 <button key={cat} onClick={() => setNewExpenseCategory(cat as CategoryType)} className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap font-medium transition-colors ${newExpenseCategory === cat ? 'bg-nordic-text text-white' : 'bg-white text-gray-500 border border-gray-100'}`}><CategoryIcon type={cat} /><span>{cat === 'food' ? '餐飲' : cat === 'transport' ? '交通' : cat === 'stay' ? '住宿' : cat === 'activity' ? '娛樂' : '購物'}</span></button>
               ))}
             </div>
             <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-                {/* 🔴 改用 members */}
                 {members.map(m => (
                     <button key={m.id} onClick={() => setNewExpensePayer(m.name)} className={`px-4 py-1 rounded-lg text-sm font-bold border ${newExpensePayer === m.name ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-white text-gray-400 border-gray-100'}`}>{m.name}</button>
                 ))}

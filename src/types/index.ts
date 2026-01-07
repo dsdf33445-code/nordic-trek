@@ -21,7 +21,7 @@ export interface DaySchedule {
 
 export interface Booking {
   id: string;
-  type: 'flight' | 'stay' | 'car' | 'transport';
+  type: 'flight' | 'stay' | 'car' | 'transport' | 'activity';
   title: string;
   subtitle: string;
   date: string;
