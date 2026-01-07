@@ -11,10 +11,10 @@ import { EXCHANGE_RATES, formatCurrency } from '../utils/helpers';
 
 interface ExpenseViewProps {
   expenses: Expense[];
-  setExpenses: (expenses: Expense[]) => void;
+  onAddExpense: (expense: Expense) => void;
 }
 
-export default function ExpenseView({ expenses, setExpenses }: ExpenseViewProps) {
+export default function ExpenseView({ expenses, onAddExpense }: ExpenseViewProps) {
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [newExpenseAmount, setNewExpenseAmount] = useState("");
   const [newExpenseCurrency, setNewExpenseCurrency] = useState<CurrencyCode>('ISK');
@@ -33,7 +33,7 @@ export default function ExpenseView({ expenses, setExpenses }: ExpenseViewProps)
       date: format(new Date(), 'yyyy-MM-dd'),
       payer: newExpensePayer
     };
-    setExpenses([newExp, ...expenses]);
+    onAddExpense(newExp);
     setShowAddExpense(false);
     setNewExpenseAmount("");
     setNewExpenseTitle("");

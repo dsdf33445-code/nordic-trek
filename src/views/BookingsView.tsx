@@ -4,8 +4,13 @@ import { faPassport, faUnlock, faLock, faEye, faEyeSlash } from '@fortawesome/fr
 import { initialBookings } from '../data/mock';
 import { CategoryIcon } from '../components/Shared';
 import { PIN_CODE } from '../utils/helpers';
+import type { Booking } from '../types';
 
-export default function BookingsView() {
+interface BookingsViewProps {
+  bookings: Booking[];
+}
+
+export default function BookingsView({ bookings }: BookingsViewProps) {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
   const [pinInput, setPinInput] = useState("");
@@ -24,7 +29,7 @@ export default function BookingsView() {
       </div>
 
       {/* Cards */}
-      {initialBookings.map((booking) => (
+      {bookings.map((booking) => (
         <div key={booking.id} className="bg-white rounded-3xl shadow-soft overflow-hidden border border-gray-100">
            <div className={`p-4 flex justify-between items-center text-white ${booking.type === 'flight' ? 'bg-blue-500' : booking.type === 'car' ? 'bg-slate-700' : 'bg-emerald-500'}`}>
               <div className="flex items-center gap-3"><div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm"><CategoryIcon type={booking.type} className="text-white"/></div><div><h3 className="font-bold text-lg leading-tight">{booking.title}</h3><p className="text-xs opacity-80 font-mono">{booking.subtitle}</p></div></div>

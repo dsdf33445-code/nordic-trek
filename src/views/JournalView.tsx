@@ -3,15 +3,14 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faTimes, faImage, faHeart, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-// Change: Added 'type' keyword
 import type { JournalPost } from '../types';
 
 interface JournalViewProps {
   posts: JournalPost[];
-  setPosts: (posts: JournalPost[]) => void;
+  onAddPost: (post: JournalPost) => void;
 }
 
-export default function JournalView({ posts, setPosts }: JournalViewProps) {
+export default function JournalView({ posts, onAddPost }: JournalViewProps) {
   const [showAddPost, setShowAddPost] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
 
@@ -26,7 +25,7 @@ export default function JournalView({ posts, setPosts }: JournalViewProps) {
       author: 'Me',
       likes: 0
     };
-    setPosts([newPost, ...posts]);
+    onAddPost(newPost); // 呼叫父層
     setShowAddPost(false);
     setNewPostContent("");
   };

@@ -3,11 +3,16 @@ import { format, parseISO, addDays } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import { initialSchedule } from '../data/mock';
 import { WeatherIcon, CategoryIcon } from '../components/Shared';
 import { TRIP_START_DATE, TRIP_END_DATE } from '../utils/helpers';
+import type { DaySchedule } from '../types';
 
-export default function ScheduleView() {
+// 新增 Props 介面
+interface ScheduleViewProps {
+  schedules: DaySchedule[];
+}
+
+export default function ScheduleView({ schedules }: ScheduleViewProps) {
   const [selectedDate, setSelectedDate] = useState<string>("2026-09-19");
 
   const dateList = useMemo(() => {
@@ -21,7 +26,7 @@ export default function ScheduleView() {
     return dates;
   }, []);
 
-  const currentSchedule = initialSchedule.find(d => d.date === selectedDate);
+  const currentSchedule = schedules.find(d => d.date === selectedDate);
 
   return (
     <div className="space-y-6">
