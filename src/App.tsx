@@ -6,6 +6,7 @@ import { faBookOpen, faWallet, faSuitcase, faUserFriends, faPaperPlane } from '@
 
 import { initialExpenses, initialPosts } from './data/mock';
 import { TRIP_START_DATE, EXCHANGE_RATES, formatCurrency } from './utils/helpers';
+import DataSeeder from './components/DataSeeder';
 
 // Views
 import ScheduleView from './views/ScheduleView';
@@ -24,7 +25,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-nordic-bg font-sans pb-24 text-nordic-text">
-      
+      <DataSeeder />      
+
       {/* Header */}
       <div className="bg-white p-6 rounded-b-3xl shadow-soft sticky top-0 z-10">
         <div className="flex justify-between items-center mb-4">
