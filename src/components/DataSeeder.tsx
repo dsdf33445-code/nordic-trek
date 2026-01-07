@@ -1,7 +1,7 @@
 // src/components/DataSeeder.tsx
 import { useState } from 'react';
 import { db } from '../firebase';
-import { collection, writeBatch, doc } from 'firebase/firestore';
+import { writeBatch, doc } from 'firebase/firestore';
 import { initialSchedule, initialBookings, initialExpenses, initialMembers, initialPosts } from '../data/mock';
 
 export default function DataSeeder() {

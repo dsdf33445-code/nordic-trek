@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPassport, faUnlock, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { initialBookings } from '../data/mock';
 import { CategoryIcon } from '../components/Shared';
 import { PIN_CODE } from '../utils/helpers';
 import type { Booking } from '../types';

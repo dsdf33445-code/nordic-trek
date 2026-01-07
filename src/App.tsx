@@ -51,10 +51,10 @@ function App() {
       setJournalPosts(data);
     });
 
-    // 3. 監聽行程 (Schedules) - 依日期排序
+    // 3. 監聽行程
     const qSchedules = query(collection(db, "schedules"), orderBy("date", "asc"));
     const unsubSchedules = onSnapshot(qSchedules, (snapshot) => {
-        const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as DaySchedule));
+        const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as unknown as DaySchedule));
         setSchedules(data);
     });
 
