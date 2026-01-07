@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPassport, faUnlock, faLock, faEye, faEyeSlash, faCar, faBed, faMapSigns } from '@fortawesome/free-solid-svg-icons';
+// 🔴 修正：移除了 faPassport
+import { faUnlock, faLock, faEye, faEyeSlash, faCar, faBed, faMapSigns } from '@fortawesome/free-solid-svg-icons';
 import { CategoryIcon } from '../components/Shared';
 import { PIN_CODE } from '../utils/helpers';
 import type { Booking } from '../types';
@@ -23,7 +24,6 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
   };
 
   const filteredBookings = bookings.filter(booking => {
-    // 🔴 防呆：如果資料庫缺漏 type 欄位，給預設值以免報錯
     const type = booking.type || 'other';
     if (activeTab === 'transport') return ['flight', 'car', 'transport'].includes(type);
     if (activeTab === 'stay') return type === 'stay';
@@ -33,7 +33,7 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
+      {/* Header: Tabs + Lock */}
       <div className="flex items-center justify-between gap-3 mb-2">
         <div className="flex bg-white p-1 rounded-2xl shadow-sm border border-gray-100 flex-1">
           <button onClick={() => setActiveTab('transport')} className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1 ${activeTab === 'transport' ? 'bg-blue-500 text-white shadow-md' : 'text-gray-400 hover:text-gray-600'}`}><FontAwesomeIcon icon={faCar} /> 交通</button>
@@ -56,11 +56,9 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
               }`}>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      {/* 🔴 防呆：確保 type 存在 */}
                       <CategoryIcon type={booking.type || 'other'} className="text-white"/>
                     </div>
                     <div>
-                      {/* 🔴 防呆：確保 title/subtitle 存在 */}
                       <h3 className="font-bold text-lg leading-tight">{booking.title || '未命名預訂'}</h3>
                       <p className="text-xs opacity-80 font-mono">{booking.subtitle || ''}</p>
                     </div>
@@ -70,7 +68,6 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
                   {booking.type === 'flight' && <div className="absolute top-0 left-0 w-full -translate-y-1/2 flex items-center justify-between px-2"><div className="w-4 h-4 bg-nordic-bg rounded-full"></div><div className="flex-1 border-t-2 border-dashed border-gray-200 mx-2"></div><div className="w-4 h-4 bg-nordic-bg rounded-full"></div></div>}
                   
                   <div className="grid grid-cols-2 gap-y-4 gap-x-2 mb-4">
-                    {/* 🔴 關鍵修正：加上 ?. 以及 || [] 防止當機 */}
                     {(booking.details || []).map((detail, idx) => (
                       <div key={idx}>
                         <p className="text-xs text-nordic-muted uppercase tracking-wider font-bold mb-1">{detail.label}</p>
