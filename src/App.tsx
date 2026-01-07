@@ -12,8 +12,6 @@ import type { Expense, JournalPost, DaySchedule, Booking } from './types';
 
 // Helpers
 import { TRIP_START_DATE, EXCHANGE_RATES, formatCurrency } from './utils/helpers';
-// Mock Data (只用來做 Initial State 的空值結構，不再直接顯示)
-import { initialMembers } from './data/mock';
 
 // Views
 import ScheduleView from './views/ScheduleView';
