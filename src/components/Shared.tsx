@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
+  // Category Icons
   faPlane, 
   faBed, 
   faMapSigns, 
@@ -9,10 +10,15 @@ import {
   faEllipsisH, 
   faCar, 
   faTrain,   // [新增]
-  faShip     // [新增]
+  faShip,    // [新增]
+  // Weather Icons [補回]
+  faCloudSun,
+  faCloudRain,
+  faSnowflake
 } from '@fortawesome/free-solid-svg-icons';
 import type { CategoryType } from '../types';
 
+// 1. 分類圖示元件 (包含火車與船)
 export const CategoryIcon = ({ type, className = "" }: { type: string | CategoryType, className?: string }) => {
   let icon;
   switch (type) {
@@ -29,4 +35,13 @@ export const CategoryIcon = ({ type, className = "" }: { type: string | Category
   }
 
   return <FontAwesomeIcon icon={icon} className={className} />;
+};
+
+// 2. 天氣圖示元件 (補回此部分)
+export const WeatherIcon = ({ type }: { type?: string }) => {
+  if (type === 'sunny') return <FontAwesomeIcon icon={faCloudSun} className="text-yellow-500" />;
+  if (type === 'rainy') return <FontAwesomeIcon icon={faCloudRain} className="text-blue-400" />;
+  if (type === 'snowy') return <FontAwesomeIcon icon={faSnowflake} className="text-cyan-300" />;
+  // Default
+  return <FontAwesomeIcon icon={faCloudSun} className="text-gray-400" />;
 };
