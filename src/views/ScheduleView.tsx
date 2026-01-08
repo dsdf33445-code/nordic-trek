@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { format, parseISO, addDays } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faClock, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'; // [新增] 加入外連圖示
 import { WeatherIcon, CategoryIcon } from '../components/Shared';
 import { TRIP_START_DATE, TRIP_END_DATE } from '../utils/helpers';
 import type { DaySchedule } from '../types';
@@ -27,6 +27,11 @@ export default function ScheduleView({ schedules }: ScheduleViewProps) {
   }, []);
 
   const currentSchedule = schedules.find(d => d.date === selectedDate);
+
+  // [新增] 處理 Google Maps 連結的 helper function
+  const getGoogleMapsLink = (location: string) => {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  };
 
   return (
     <div className="space-y-6">
@@ -61,13 +66,27 @@ export default function ScheduleView({ schedules }: ScheduleViewProps) {
           currentSchedule.items.map((item) => (
             <div key={item.id} className="relative pl-8 group">
               <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 border-white shadow-sm ${item.category === 'flight' ? 'bg-blue-500' : item.category === 'stay' ? 'bg-indigo-500' : 'bg-nordic-text'}`}></div>
-              <div className="bg-white p-5 rounded-2xl shadow-soft border border-gray-50/50">
+              <div className="bg-white p-5 rounded-2xl shadow-soft border border-gray-50/50 hover:shadow-md transition-shadow duration-300"> {/* Added hover shadow */}
                 <div className="flex justify-between items-start mb-3">
                   <span className="bg-gray-50 text-nordic-muted text-xs px-2 py-1 rounded-md font-mono font-bold flex items-center gap-2"><FontAwesomeIcon icon={faClock} className="text-[10px]" />{item.time}</span>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-gray-50 text-gray-500`}><CategoryIcon type={item.category}/></div>
                 </div>
                 <h3 className="font-bold text-lg mb-1 leading-snug">{item.title}</h3>
-                {item.location && <div className="text-sm text-nordic-muted flex items-center gap-1.5 mb-3"><FontAwesomeIcon icon={faMapMarkerAlt} className="text-xs opacity-70" />{item.location}</div>}
+                
+                {/* [修改] 地點顯示改為可點擊的連結 */}
+                {item.location && (
+                  <a 
+                    href={getGoogleMapsLink(item.location)}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-nordic-muted flex items-center gap-1.5 mb-3 group/link hover:text-blue-600 transition-colors w-fit"
+                  >
+                    <FontAwesomeIcon icon={faMapMarkerAlt} className="text-xs opacity-70 group-hover/link:text-blue-500 transition-colors" />
+                    <span className="border-b border-transparent group-hover/link:border-blue-200">{item.location}</span>
+                    <FontAwesomeIcon icon={faExternalLinkAlt} className="text-[10px] opacity-0 group-hover/link:opacity-50 transition-opacity ml-1" />
+                  </a>
+                )}
+
                 {item.note && <div className="bg-amber-50 text-amber-700 text-xs px-3 py-2 rounded-xl font-medium border border-amber-100">💡 {item.note}</div>}
               </div>
             </div>
