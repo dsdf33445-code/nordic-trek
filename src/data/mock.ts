@@ -1,5 +1,6 @@
 // --- 3. Mock Data (FULL ITINERARY 24 Days) ---
 import type { DaySchedule, Booking, Expense, Member, JournalPost } from '../types';
+
 export const initialSchedule: DaySchedule[] = [
   // --- TAIWAN -> NETHERLANDS ---
   {
@@ -261,7 +262,6 @@ export const initialBookings: Booking[] = [
   { id: 'b4', type: 'stay', title: 'Brautarholt 20', subtitle: 'Reykjavik Apartment', date: '2026-09-19', details: [{ label: 'Check-in', value: '15:00' }, { label: 'Guests', value: '4 Adults' }], refNumber: 'B-88219', status: 'confirmed' },
   { id: 'b5', type: 'transport', title: 'Silja Symphony', subtitle: 'Overnight Cruise', date: '2026-10-04', details: [{ label: 'DEP', value: 'STO 16:45' }, { label: 'ARR', value: 'HEL 10:30' }], refNumber: 'SIL-990', status: 'confirmed' },
   { id: 'b6', type: 'transport', title: 'VR Night Train', subtitle: 'Santa Claus Express', date: '2026-10-05', details: [{ label: 'DEP', value: 'HEL 23:00' }, { label: 'ARR', value: 'RVN 10:00' }], refNumber: 'VR-882', status: 'confirmed' },
-  link: 'https://www.china-airlines.com/tw/zh'
 ];
 
 export const initialExpenses: Expense[] = [
