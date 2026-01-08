@@ -57,6 +57,7 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
                 booking.type === 'flight' ? 'bg-blue-500' : 
                 booking.type === 'car' ? 'bg-slate-700' : 
                 booking.type === 'stay' ? 'bg-indigo-500' :
+                booking.type === 'activity' ? 'bg-emerald-500' : // [Fix] 明確加入 activity 顏色
                 'bg-emerald-500'
               }`}>
                   <div className="flex items-center gap-3">

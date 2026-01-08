@@ -21,7 +21,8 @@ export interface DaySchedule {
 
 export interface Booking {
   id: string;
-  type: 'flight' | 'stay' | 'car' | 'transport';
+  // [Fix] 這裡加入了 'activity' 以匹配前端頁面的篩選邏輯
+  type: 'flight' | 'stay' | 'car' | 'transport' | 'activity';
   title: string;
   subtitle: string;
   date: string;
