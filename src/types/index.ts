@@ -1,6 +1,6 @@
 // src/types/index.ts
 
-export type CategoryType = 'flight' | 'stay' | 'activity' | 'food' | 'transport' | 'shopping' | 'other' | 'car';
+export type CategoryType = 'flight' | 'stay' | 'activity' | 'food' | 'transport' | 'shopping' | 'other' | 'car' | 'train' | 'ship';
 export type CurrencyCode = 'TWD' | 'ISK' | 'EUR' | 'NOK' | 'SEK';
 
 export interface ItineraryItem {
@@ -21,8 +21,7 @@ export interface DaySchedule {
 
 export interface Booking {
   id: string;
-  // [Fix] 這裡加入了 'activity' 以匹配前端頁面的篩選邏輯
-  type: 'flight' | 'stay' | 'car' | 'transport' | 'activity';
+  type: 'flight' | 'stay' | 'car' | 'train' | 'ship' | 'transport' | 'activity';
   title: string;
   subtitle: string;
   date: string;

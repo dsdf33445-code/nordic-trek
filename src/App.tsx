@@ -26,7 +26,6 @@ function App() {
   const [journalPosts, setJournalPosts] = useState<JournalPost[]>([]);
   const [schedules, setSchedules] = useState<DaySchedule[]>([]); 
   const [bookings, setBookings] = useState<Booking[]>([]);
-  // 🔴 新增：成員狀態
   const [members, setMembers] = useState<Member[]>([]);
 
   useEffect(() => {

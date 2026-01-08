@@ -19,7 +19,7 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
   const [newExpenseCurrency, setNewExpenseCurrency] = useState<CurrencyCode>('ISK');
   const [newExpenseCategory, setNewExpenseCategory] = useState<CategoryType>('food');
   const [newExpenseTitle, setNewExpenseTitle] = useState("");
-  const [newExpensePayer, setNewExpensePayer] = useState("Me");
+  const [newExpensePayer, setNewExpensePayer] = useState("毓邦");
   const [newExpenseDate, setNewExpenseDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   const handleAddExpense = () => {
