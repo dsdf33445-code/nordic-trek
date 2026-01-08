@@ -94,14 +94,6 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
                       </div>
                     ))}
                   </div>
-
-                  {/* Ref Number Section (Removed Lock Logic) */}
-                  <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                    <p className="text-[10px] text-gray-400 uppercase font-bold">Ref</p>
-                    <p className="font-mono font-bold text-lg tracking-wider text-gray-700">
-                      {booking.refNumber || '---'}
-                    </p>
-                  </div>
               </div>
             </div>
           ))
