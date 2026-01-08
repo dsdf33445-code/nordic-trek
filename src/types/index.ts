@@ -21,13 +21,14 @@ export interface DaySchedule {
 
 export interface Booking {
   id: string;
-  type: 'flight' | 'stay' | 'car' | 'transport' | 'activity';
+  type: 'flight' | 'stay' | 'car' | 'transport';
   title: string;
   subtitle: string;
   date: string;
   details: { label: string; value: string; }[];
   refNumber: string;
   status: 'confirmed' | 'pending';
+  link?: string;  
 }
 
 export interface Expense {

@@ -20,7 +20,6 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
   const [newExpenseCategory, setNewExpenseCategory] = useState<CategoryType>('food');
   const [newExpenseTitle, setNewExpenseTitle] = useState("");
   const [newExpensePayer, setNewExpensePayer] = useState("Me");
-  // 🔴 新增：日期狀態，預設今天
   const [newExpenseDate, setNewExpenseDate] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   const handleAddExpense = () => {
@@ -100,7 +99,7 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
                 </div>
             </div>
 
-            <input type="text" placeholder="消費項目 (如: 晚餐)" value={newExpenseTitle} onChange={(e) => setNewExpenseTitle(e.target.value)} className="w-full bg-white p-4 rounded-xl text-center font-bold text-lg mb-4 shadow-sm outline-none" />
+            <input type="text" placeholder="消費項目" value={newExpenseTitle} onChange={(e) => setNewExpenseTitle(e.target.value)} className="w-full bg-white p-4 rounded-xl text-center font-bold text-lg mb-4 shadow-sm outline-none" />
             
             <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-2">
               {['food', 'transport', 'stay', 'activity', 'shopping'].map((cat) => (
@@ -113,7 +112,7 @@ export default function ExpenseView({ expenses, members, onAddExpense }: Expense
                 ))}
             </div>
             <div className="flex gap-2 mb-6">
-              {['ISK', 'EUR', 'NOK', 'TWD'].map(curr => (<button key={curr} onClick={() => setNewExpenseCurrency(curr as CurrencyCode)} className={`flex-1 py-2 rounded-lg font-bold text-sm ${newExpenseCurrency === curr ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>{curr}</button>))}
+              {['ISK', 'EUR', 'NOK', 'SEK', 'TWD'].map(curr => (<button key={curr} onClick={() => setNewExpenseCurrency(curr as CurrencyCode)} className={`flex-1 py-2 rounded-lg font-bold text-sm ${newExpenseCurrency === curr ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>{curr}</button>))}
             </div>
             <div className="grid grid-cols-3 gap-3 mt-auto">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0].map((num) => (<button key={num} onClick={() => handleKeypadPress(num.toString())} className="bg-white rounded-2xl p-4 text-2xl font-bold text-nordic-text shadow-sm active:bg-gray-50 active:scale-95 transition-all">{num}</button>))}
