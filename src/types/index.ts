@@ -1,5 +1,6 @@
 // src/types/index.ts
 
+// [新增] 在這裡加入 'train' 和 'ship'
 export type CategoryType = 'flight' | 'stay' | 'activity' | 'food' | 'transport' | 'shopping' | 'other' | 'car' | 'train' | 'ship';
 export type CurrencyCode = 'TWD' | 'ISK' | 'EUR' | 'NOK' | 'SEK';
 
@@ -21,7 +22,8 @@ export interface DaySchedule {
 
 export interface Booking {
   id: string;
-  type: 'flight' | 'stay' | 'car' | 'train' | 'ship' | 'transport' | 'activity';
+  // [新增] 加入 'train' 和 'ship' 讓 TypeScript 允許這些類型
+  type: 'flight' | 'stay' | 'car' | 'transport' | 'activity' | 'train' | 'ship';
   title: string;
   subtitle: string;
   date: string;

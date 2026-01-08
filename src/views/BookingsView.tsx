@@ -16,7 +16,10 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
 
   const filteredBookings = bookings.filter(booking => {
     const type = booking.type || 'other';
-    if (activeTab === 'transport') return ['flight', 'car', 'transport'].includes(type);
+    
+    // [修改] 將 train 和 ship 加入 transport 的篩選條件中
+    if (activeTab === 'transport') return ['flight', 'car', 'transport', 'train', 'ship'].includes(type);
+    
     if (activeTab === 'stay') return type === 'stay';
     if (activeTab === 'activity') return type === 'activity';
     return false;
@@ -53,12 +56,15 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
         {filteredBookings.length > 0 ? (
           filteredBookings.map((booking) => (
             <div key={booking.id} className="bg-white rounded-3xl shadow-soft overflow-hidden border border-gray-100 animate-fade-in">
+              {/* [修改] 根據不同類型顯示不同背景顏色 */}
               <div className={`p-4 flex justify-between items-center text-white ${
                 booking.type === 'flight' ? 'bg-blue-500' : 
                 booking.type === 'car' ? 'bg-slate-700' : 
+                booking.type === 'train' ? 'bg-orange-600' : // 火車顏色
+                booking.type === 'ship' ? 'bg-cyan-600' :    // 船隻顏色
                 booking.type === 'stay' ? 'bg-indigo-500' :
-                booking.type === 'activity' ? 'bg-emerald-500' : // [Fix] 明確加入 activity 顏色
-                'bg-emerald-500'
+                booking.type === 'activity' ? 'bg-emerald-500' :
+                'bg-gray-500'
               }`}>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -93,6 +99,14 @@ export default function BookingsView({ bookings }: BookingsViewProps) {
                         <p className="text-sm font-semibold text-nordic-text">{detail.value}</p>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Ref Number Section */}
+                  <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                    <p className="text-[10px] text-gray-400 uppercase font-bold">Ref</p>
+                    <p className="font-mono font-bold text-lg tracking-wider text-gray-700">
+                      {booking.refNumber || '---'}
+                    </p>
                   </div>
               </div>
             </div>
