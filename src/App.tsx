@@ -103,21 +103,36 @@ function App() {
 
       <div className="bg-white p-6 rounded-b-3xl shadow-soft sticky top-0 z-10">
         <div className="flex justify-between items-center mb-4">
-          <div><h1 className="text-2xl font-bold tracking-tight">Nordic Trek</h1><p className="text-nordic-muted text-sm font-medium">2026 冰島+北歐三國</p></div>
-          <div className="text-right"><span className="block text-3xl font-bold text-nordic-primary">{daysUntilTrip}</span><span className="text-xs text-nordic-muted font-bold uppercase tracking-wider">Days to go</span></div>
+          <div><h1 className="text-2xl font-bold tracking-tight">Nordic Trek</h1><p className="text-nordic-muted text-sm font-medium">2026 冰島自駕環島 + 北歐三國</p></div>
+          <div className="text-right"><span className="block text-3xl font-bold text-nordic-primary">{daysUntilTrip}</span>
+          <span className="text-xs text-nordic-muted font-bold uppercase tracking-wider">天後出發</span></div>
         </div>
 
         {activeTab === 'expense' && (
            <div className="bg-nordic-text text-white p-4 rounded-2xl shadow-lg relative overflow-hidden">
              <div className="relative z-10">
-               <p className="text-xs opacity-70 mb-1">總支出估算 (TWD)</p>
-               <h2 className="text-3xl font-bold tracking-tight">{formatCurrency(totalExpenseTWD, 'TWD')}</h2>
-               <div className="mt-3 flex gap-4 text-xs opacity-80">
-                 <span><span className="font-bold">ISK</span> {formatCurrency(expenses.filter(e => e.currency === 'ISK').reduce((a,b)=>a+b.amount,0), 'ISK')}</span>
-                 <span><span className="font-bold">EUR</span> {formatCurrency(expenses.filter(e => e.currency === 'EUR').reduce((a,b)=>a+b.amount,0), 'EUR')}</span>
+               <p className="text-xs opacity-60 mb-1">總支出估算</p>
+               <h2 className="text-3xl font-bold tracking-tight mb-2">{formatCurrency(totalExpenseTWD, 'TWD')}</h2>
+               <div className="flex gap-6 mt-1">
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-bold opacity-60 bg-white/20 px-1.5 rounded">ISK</span> 
+                    <span className="text-lg font-bold">{formatCurrency(totalISK, 'ISK').replace('ISK', '').trim()}</span>
+                 </div>
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-bold opacity-60 bg-white/20 px-1.5 rounded">EUR</span> 
+                    <span className="text-lg font-bold">{formatCurrency(totalEUR, 'EUR').replace('EUR', '').trim()}</span>
+                 </div>
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-bold opacity-60 bg-white/20 px-1.5 rounded">NOK</span> 
+                    <span className="text-lg font-bold">{formatCurrency(totalNOK, 'NOK').replace('NOK', '').trim()}</span>
+                 </div>
+                 <div className="flex items-baseline gap-2">
+                    <span className="text-xs font-bold opacity-60 bg-white/20 px-1.5 rounded">SEK</span> 
+                    <span className="text-lg font-bold">{formatCurrency(totalSEK, 'SEK').replace('SEK', '').trim()}</span>
+                 </div>
                </div>
              </div>
-             <div className="absolute right-[-20px] top-[-20px] w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
+             <div className="absolute right-[-20px] top-[-20px] w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
            </div>
         )}
       </div>
