@@ -15,6 +15,9 @@ import ExpenseView from './views/ExpenseView';
 import JournalView from './views/JournalView';
 import MembersView from './views/MembersView';
 
+// Types
+import type { Expense, JournalPost } from './types';
+
 // Data
 import { 
   initialSchedule, 
@@ -29,11 +32,24 @@ type Tab = 'schedule' | 'bookings' | 'expense' | 'journal' | 'members';
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('schedule');
 
-  // --- [Fix] 自動計算所有幣別的總額 (不再寫死 totalISK, totalNOK...) ---
+  // [Fix] 使用 State 管理資料，這樣新增的資料才會即時顯示
+  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
+  const [posts, setPosts] = useState<JournalPost[]>(initialPosts);
+
+  // [Fix] 定義新增功能
+  const handleAddExpense = (newExpense: Expense) => {
+    setExpenses(prev => [newExpense, ...prev]); // 新的放前面
+  };
+
+  const handleAddPost = (newPost: JournalPost) => {
+    setPosts(prev => [newPost, ...prev]);
+  };
+
+  // [Fix] 依賴 expenses State 計算總額，新增支出後標題金額會自動更新
   const currencyTotals = useMemo(() => {
     const totals: Record<string, number> = {};
 
-    initialExpenses.forEach(item => {
+    expenses.forEach(item => {
       const currency = item.currency;
       if (totals[currency] !== undefined) {
         totals[currency] += item.amount;
@@ -43,7 +59,7 @@ function App() {
     });
 
     return totals;
-  }, []);
+  }, [expenses]); // 這裡監聽 expenses 變化
 
   const renderContent = () => {
     switch (activeTab) {
@@ -52,11 +68,24 @@ function App() {
       case 'bookings':
         return <BookingsView bookings={initialBookings} />;
       case 'expense':
-        return <ExpenseView expenses={initialExpenses} />;
+        // [Fix] 補上 missing props: members, onAddExpense
+        return <ExpenseView 
+                 expenses={expenses} 
+                 members={initialMembers} 
+                 onAddExpense={handleAddExpense} 
+               />;
       case 'journal':
-        return <JournalView posts={initialPosts} />;
+        // [Fix] 補上 missing prop: onAddPost
+        return <JournalView 
+                 posts={posts} 
+                 onAddPost={handleAddPost} 
+               />;
       case 'members':
-        return <MembersView members={initialMembers} />;
+        // [Fix] 補上 missing prop: expenses (用於計算代墊)
+        return <MembersView 
+                 members={initialMembers} 
+                 expenses={expenses} 
+               />;
       default:
         return <ScheduleView schedules={initialSchedule} />;
     }
@@ -80,7 +109,7 @@ function App() {
           </div>
         </div>
 
-        {/* Quick Stats (動態顯示：有什麼幣別就顯示什麼) */}
+        {/* Quick Stats */}
         <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
           {Object.entries(currencyTotals).map(([currency, amount]) => (
             <div key={currency} className="flex-shrink-0 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-lg flex flex-col min-w-[80px]">
